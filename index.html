@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#171b18">
+    <title>舞台塔结构数字孪生</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <span class="brand-mark" aria-hidden="true">ST</span>
+          <div>
+            <h1>舞台塔结构数字孪生</h1>
+            <p>概念工程展示 · 施工阶段与专业系统</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <span id="stage-status" class="status-chip">加载模型中</span>
+          <button id="reset-view" class="button button-quiet" type="button">重置视图</button>
+        </div>
+      </header>
+
+      <section class="workspace">
+        <aside class="panel left-panel" aria-label="专业图层">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">工程图层</p>
+              <h2>显示控制</h2>
+            </div>
+            <button id="toggle-layers" class="icon-button" type="button" aria-label="折叠图层面板" title="折叠图层面板">−</button>
+          </div>
+          <div id="layer-controls" class="layer-list"></div>
+          <div class="control-divider"></div>
+          <div class="switch-row">
+            <label class="check-row">
+              <input id="toggle-grid" type="checkbox" checked>
+              <span>轴网和标高</span>
+            </label>
+            <span class="key-hint">G</span>
+          </div>
+          <div class="switch-row">
+            <label class="check-row">
+              <input id="toggle-section" type="checkbox">
+              <span>A-A 剖面</span>
+            </label>
+            <span class="key-hint">A</span>
+          </div>
+          <div class="view-presets">
+            <p class="eyebrow">相机预设</p>
+            <div id="preset-controls" class="preset-grid"></div>
+          </div>
+        </aside>
+
+        <section id="viewport" class="viewport" aria-label="三维工程模型">
+          <div class="viewport-hud">
+            <span id="model-count">模型节点 --</span>
+            <span id="selected-hud">未选择构件</span>
+          </div>
+          <div id="loading" class="loading-state">
+            <span class="loader-dot" aria-hidden="true"></span>
+            <span id="loading-text">正在准备工程界面</span>
+          </div>
+          <div id="webgl-error" class="empty-state" hidden>
+            <strong id="fallback-title">已切换到工程预览</strong>
+            <span id="fallback-text">当前浏览器无法创建 WebGL 场景，时间轴和专业信息仍可查看。</span>
+          </div>
+          <img id="preview-image" class="preview-image" src="./stage_tower_preview.png" alt="舞台塔结构工程预览" hidden>
+          <canvas id="stage-canvas"></canvas>
+          <button id="fit-view" class="floating-button" type="button" aria-label="适配模型到视图" title="适配模型到视图">适配模型</button>
+        </section>
+
+        <aside class="panel info-panel" aria-live="polite">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">构件检查</p>
+              <h2>选择信息</h2>
+            </div>
+            <span class="selection-dot" aria-hidden="true"></span>
+          </div>
+          <div id="selection-empty" class="selection-empty">
+            <span class="selection-symbol" aria-hidden="true">+</span>
+            <p>点击模型中的构件查看名称、专业和施工阶段。</p>
+          </div>
+          <dl id="selection-details" class="details-list" hidden>
+            <div><dt>构件</dt><dd id="detail-name">--</dd></div>
+            <div><dt>编号</dt><dd id="detail-id">--</dd></div>
+            <div><dt>专业</dt><dd id="detail-discipline">--</dd></div>
+            <div><dt>楼层</dt><dd id="detail-floor">--</dd></div>
+            <div><dt>施工阶段</dt><dd id="detail-stage">--</dd></div>
+          </dl>
+          <div class="boundary-note">
+            <strong>概念模型边界</strong>
+            <p>用于工程关系、施工工序和系统展示，不用于结构验算或施工图审查。</p>
+          </div>
+        </aside>
+      </section>
+
+      <footer class="timeline-bar">
+        <div class="timeline-topline">
+          <div>
+            <p class="eyebrow">施工时间轴</p>
+            <h2 id="timeline-label">完工环境与施工设备演示</h2>
+          </div>
+          <div class="timeline-actions">
+            <button id="play-toggle" class="button button-primary" type="button">播放</button>
+            <label class="speed-control">
+              <span>速度</span>
+              <select id="playback-speed">
+                <option value="0.5">0.5×</option>
+                <option value="1" selected>1×</option>
+                <option value="2">2×</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="timeline-track-wrap">
+          <input id="stage-range" class="stage-range" type="range" min="1" max="8" step="1" value="8" aria-label="施工阶段">
+          <div id="stage-markers" class="stage-markers"></div>
+        </div>
+      </footer>
+    </main>
+    <script type="module" src="./viewer.js"></script>
+  </body>
+</html>

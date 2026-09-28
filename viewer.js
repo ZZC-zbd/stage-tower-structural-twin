@@ -512,6 +512,12 @@ function applyLayerMode(preset) {
   updateVisibility();
 }
 
+function markActivePreset(key) {
+  document.querySelectorAll(".preset-button").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.preset === key);
+  });
+}
+
 function setCameraPreset(key) {
   const preset = manifest?.cameraPresets?.[key];
   if (!preset) return;

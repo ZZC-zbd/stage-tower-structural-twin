@@ -32,6 +32,12 @@
             </div>
             <button id="toggle-layers" class="icon-button" type="button" aria-label="折叠图层面板" title="折叠图层面板">−</button>
           </div>
+          <div class="mode-control" role="group" aria-label="查看模式">
+            <button class="mode-button is-active" type="button" data-mode="structure">结构模式</button>
+            <button class="mode-button" type="button" data-mode="construction">施工模式</button>
+            <button class="mode-button" type="button" data-mode="section">剖切模式</button>
+            <button class="mode-button" type="button" data-mode="coordination">专业协同</button>
+          </div>
           <div id="layer-controls" class="layer-list"></div>
           <div class="control-divider"></div>
           <div class="switch-row">
@@ -48,6 +54,52 @@
             </label>
             <span class="key-hint">A</span>
           </div>
+          <div class="switch-row">
+            <label class="check-row">
+              <input id="toggle-connections" type="checkbox" checked>
+              <span>结构连接</span>
+            </label>
+            <span class="key-hint">C</span>
+          </div>
+          <div class="switch-row">
+            <label class="check-row">
+              <input id="toggle-material-labels" type="checkbox" checked>
+              <span>材质标注</span>
+            </label>
+            <span class="key-hint">M</span>
+          </div>
+          <div id="section-controls" class="section-controls" hidden>
+            <div class="section-axis" role="group" aria-label="剖切方向">
+              <button class="axis-button is-active" type="button" data-axis="x">A-A</button>
+              <button class="axis-button" type="button" data-axis="z">B-B</button>
+              <button class="axis-button" type="button" data-axis="y">水平</button>
+            </div>
+            <label class="section-range-label" for="section-range">
+              <span>剖切位置</span>
+              <output id="section-value">--</output>
+            </label>
+            <input id="section-range" class="section-range" type="range" min="0" max="1" step="0.01" value="0.5" aria-label="剖切位置">
+          </div>
+          <div class="structure-legend" aria-label="结构角色图例">
+            <p class="eyebrow">结构角色</p>
+            <div class="legend-grid">
+              <span><i class="legend-swatch role-foundation"></i>基础</span>
+              <span><i class="legend-swatch role-column"></i>柱</span>
+              <span><i class="legend-swatch role-beam"></i>梁</span>
+              <span><i class="legend-swatch role-slab"></i>板</span>
+              <span><i class="legend-swatch role-truss"></i>桁架</span>
+              <span><i class="legend-swatch role-brace"></i>支撑</span>
+            </div>
+          </div>
+          <div class="material-legend" aria-label="结构材质图例">
+            <p class="eyebrow">结构材质</p>
+            <div class="legend-grid">
+              <span><i class="legend-swatch material-concrete"></i>钢筋混凝土</span>
+              <span><i class="legend-swatch material-steel"></i>结构钢</span>
+              <span><i class="legend-swatch material-glass"></i>玻璃 / 铝合金</span>
+              <span><i class="legend-swatch material-mep"></i>机电管线</span>
+            </div>
+          </div>
           <div class="view-presets">
             <p class="eyebrow">相机预设</p>
             <div id="preset-controls" class="preset-grid"></div>
@@ -59,6 +111,7 @@
             <span id="model-count">模型节点 --</span>
             <span id="selected-hud">未选择构件</span>
           </div>
+          <div id="material-labels" class="material-labels" aria-hidden="true"></div>
           <div id="loading" class="loading-state">
             <span class="loader-dot" aria-hidden="true"></span>
             <span id="loading-text">正在准备工程界面</span>
@@ -90,6 +143,12 @@
             <div><dt>专业</dt><dd id="detail-discipline">--</dd></div>
             <div><dt>楼层</dt><dd id="detail-floor">--</dd></div>
             <div><dt>施工阶段</dt><dd id="detail-stage">--</dd></div>
+            <div><dt>结构角色</dt><dd id="detail-role">--</dd></div>
+            <div><dt>材料</dt><dd id="detail-material">--</dd></div>
+            <div><dt>截面</dt><dd id="detail-section">--</dd></div>
+            <div><dt>安装状态</dt><dd id="detail-installation">--</dd></div>
+            <div><dt>连接类型</dt><dd id="detail-connection">--</dd></div>
+            <div class="detail-related-row"><dt>关联构件</dt><dd><ul id="detail-related" class="related-list"></ul></dd></div>
           </dl>
           <div class="boundary-note">
             <strong>概念模型边界</strong>
@@ -102,7 +161,7 @@
         <div class="timeline-topline">
           <div>
             <p class="eyebrow">施工时间轴</p>
-            <h2 id="timeline-label">完工环境与施工设备演示</h2>
+            <h2 id="timeline-label">完工与设备演示</h2>
           </div>
           <div class="timeline-actions">
             <button id="play-toggle" class="button button-primary" type="button">播放</button>
